@@ -47,7 +47,7 @@ int executeCommand(char *const *enteredCommand, const char *infile, const char *
                 printf("Failed to Open: %s\n", strerror(errno));
                 _exit(1);
             }
-            dup2(fileDir, STDOUT_FILENO);
+            dup2(fileDir, STDIN_FILENO);
             close(fileDir);
         }
         if(outfile){
