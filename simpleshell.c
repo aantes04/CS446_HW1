@@ -1,4 +1,4 @@
-/* 1
+/* 
 Name: Arwen Antes
 CS 446 - Homework 1
 */
@@ -26,7 +26,7 @@ int parseInput(char *input, char splitWords[][MAX_LENGTH], int maxWords){
 }
 void changeDirectories(char *path){
     if(chdir(path) != 0){
-        perror("CD Failed");
+        printf("Failed to Change Directory: %s\n", strerror(errno));
     }
 }
 int executeCommand(char *const *enteredCommand, const char *infile, const char *outfile){
@@ -50,8 +50,8 @@ int executeCommand(char *const *enteredCommand, const char *infile, const char *
                 perror("Output File Error");
                 exit(EXIT_FAILURE);
             }
-            dup2(fd, STDOUT_FILENO);
-            close(fd);
+            dup2(fileDir, STDOUT_FILENO);
+            close(fileDir);
         }
         execvp(enteredCommand[0], enteredCommand);
         perror("Execution Failed");
@@ -65,15 +65,16 @@ int executeCommand(char *const *enteredCommand, const char *infile, const char *
 }
 
 int main(){
-    char input[MAX_LENGTH], splitWords[MAX_WORDS][MAX_LENGTH], *commands[MAX_WORDS+1], cwd[MAX_LENGTH];
-    char *netid = "netid";
+    char input[MAX_LENGTH];
+    char splitWords[MAX_WORDS][MAX_LENGTH];
 
-    while(1){
-        getcwd(cwd, sizeof(cwd));
-        printf("%s:%s$ ", netid, cwd);
-        fgets(input, MAX_LENGTH, stdin);
+    printf("Enter a command: ");
+    fgets(input, MAX_LENGTH, stdin);
+    input[strcspn(input, "\n")] = 0;
 
-        input[strcspn(in, "\n")] = 0;
-        int numWords = parseInput()
+    int numWords = parseInput(input, splitWords, MAX_WORDS);
+
+    for(int i = 0; i < numWords; i++){
+        printf("Word %d: %s\n", i+1, splitWords[i]);
     }
 }
