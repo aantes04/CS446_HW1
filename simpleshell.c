@@ -43,19 +43,22 @@ int executeCommand(char *const *enteredCommand, const char *infile, const char *
         int fileDir;
         if(infile){
             fileDir = open(infile, O_RDONLY);
+            if(fileDir < 0){
+                printf("Failed to Open: %s\n", strerror(errno));
+                _exit(1);
+            }
+            dup2(fileDir, STDOUT_FILENO);
+            close(fileDir);
         }
-        else if(outfile){
+        if(outfile){
             fileDir = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+            if(fileDir < 0){
+                printf("Failed to Open: %s\n", strerror(errno));
+                _exit(1);
+            }
+            dup2(fileDir, STDOUT_FILENO);
+            close(fileDir);
         }
-
-        if(fileDir < 0){
-            printf("Failed to Open: %s\n", strerror(errno));
-            _exit(1);
-        }
-        dup2(fileDir, STDOUT_FILENO);
-        close(fileDir);
-        
-
         execvp(enteredCommand[0], enteredCommand);
         printf("Execution Failed: %s\n", strerror(errno));
         _exit(1);

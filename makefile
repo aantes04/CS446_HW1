@@ -1,8 +1,8 @@
 shell: simpleshell.o
-	gcc -o shell simpleshell.o
+	gcc -Wall -o shell simpleshell.o
 
 simpleshell.o: simpleshell.c
-	gcc -c simpleshell.c
+	gcc -Wall -c simpleshell.c
 
 clean:
-	rm shell *.o
+	rm -f shell *.o
